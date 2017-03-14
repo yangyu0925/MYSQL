@@ -11,7 +11,7 @@
 - 读写分离
 - 对Mysql配置优化（配置最大并发数、调整缓存大小）
 - 服务器硬件升级
-- 定期进行碎步整理
+- 定期进行碎片整理
 
 # 表的设计合理化 3NF
 - 1NF 表的列具有原子性，不可在分解。只要是关系型数据库自动满足1NF
@@ -32,6 +32,8 @@
   show variables like 'long_query_time' 查询慢查询时间，默认10秒
   
   set long_query_time = 1;
+  
+  show status like '%Handler_read%';查询索引使用情况
 
 - 把慢查询记录到日志中
 
@@ -41,6 +43,42 @@
   
   slow_query_log_file=/tmp/mysql_slow.log
   
+- MySQL性能分析及explain
+
+  explain select * from test1 where id=1;
+  
 - 日志分析工具mysqldumpslow
   
 # 索引
+
+- 二叉数算法索引文件 BTREE
+- 全文索引 只支持MyISAM
+- 创建索引字段条件
+   
+   经常查询的条件
+   
+   字段内容不经常变化
+   
+- 索引的使用
+
+  联合索引使用最左边的列，索引一般会使用
+  
+  LIKE查询如果是'%aaa'不会使用到索引，'aaa%'会使用到索引
+  
+  如有条件中有OR,就要求所有字段都必须建索引
+  
+- sql优化
+
+  group by会对列进行排序，可以使用order by null禁止排序
+  
+# 存储引擎
+
+- InnoDB默认引擎、支持事务 建议使用
+
+  行锁机制
+
+- MyISAM支持全文索引、融灾性差、要求定期碎片整理
+
+  表锁机制
+  
+  optimize table tablename;
