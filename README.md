@@ -81,4 +81,4 @@
 
   表锁机制
   
-  optimize table tablename;
+  optimize table tablename; 
